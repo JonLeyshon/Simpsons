@@ -13,6 +13,9 @@ class App extends Component {
   }
   render() {
     console.log(this.state);
+    if (!this.state.quotes) {
+      return <p>Loading...</p>;
+    }
     return (
       <>
         <UserInterface data={this.state} />

@@ -9,7 +9,7 @@ class UserInterface extends Component {
     return (
       <>
         <UserSearch data={this.props} />
-        <CharacterContainer {this.props} />
+        <CharacterContainer data={this.props} />
       </>
     );
   }
