@@ -1,10 +1,14 @@
 import React, { Component } from "react";
-import Character from "./Character";
+import CharacterItem from "./CharacterItem";
 class CharacterContainer extends Component {
   state = {};
   render() {
-    console.log(this.props);
-    return <></>;
+    const { data } = this.props.data.data;
+    console.log(data);
+
+    return data.map((item) => {
+      <CharacterItem {...item} />;
+    });
   }
 }
 
