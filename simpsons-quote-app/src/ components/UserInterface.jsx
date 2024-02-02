@@ -5,11 +5,15 @@ import CharacterContainer from "./CharacterContainer";
 class UserInterface extends Component {
   state = {};
   render() {
-    console.log(this.props);
+    const { data } = this.props;
+
     return (
       <>
-        <UserSearch data={this.props} />
-        <CharacterContainer data={this.props} />
+        <UserSearch data={data} />
+        <CharacterContainer
+          data={this.props}
+          onDeleteItem={this.props.onDeleteItem}
+        />
       </>
     );
   }

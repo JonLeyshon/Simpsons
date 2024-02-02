@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import CharacterContainer from "./CharacterContainer";
 class UserSearch extends Component {
   state = {};
   render() {

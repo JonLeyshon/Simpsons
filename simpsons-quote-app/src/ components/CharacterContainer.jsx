@@ -3,11 +3,12 @@ import CharacterItem from "./CharacterItem";
 class CharacterContainer extends Component {
   state = {};
   render() {
-    const { data } = this.props.data.data;
-    console.log(data);
+    // console.log(this.props);
+    const data = this.props.data.data;
+    // console.log(data);
 
-    return data.map((item) => {
-      <CharacterItem {...item} />;
+    return data.map((item, index) => {
+      return <CharacterItem {...item} onDeleteItem={this.props.onDeleteItem} />;
     });
   }
 }

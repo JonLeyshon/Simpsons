@@ -11,14 +11,22 @@ class App extends Component {
     );
     this.setState({ quotes: data });
   }
+
+  onDeleteItem = (index) => {
+    const quotes = [...this.state.quotes];
+    this.setState({ quotes });
+  };
   render() {
-    console.log(this.state);
+    // console.log(this.state);
     if (!this.state.quotes) {
       return <p>Loading...</p>;
     }
     return (
       <>
-        <UserInterface data={this.state} />
+        <UserInterface
+          data={this.state.quotes}
+          onDeleteItem={this.onDeleteItem}
+        />
       </>
     );
   }
