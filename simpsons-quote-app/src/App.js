@@ -1,42 +1,37 @@
 import React, { Component } from "react";
 import axios from "axios";
 import UserSearch from "./ components/UserSearch";
+import CharacterContainer from "./ components/CharacterContainer";
 import "./App.css";
 class App extends Component {
-  state = {};
+  state = { searchInput: "" };
 
   onSearchInput = (e) => {
     this.setState({ searchInput: e.target.value });
-    this.handleFilteredData();
   };
 
   async componentDidMount() {
     const { data } = await axios.get(
       `https://thesimpsonsquoteapi.glitch.me/quotes?count=100`
     );
+    data.forEach((item) => {
+      item.id = Math.round(Math.random() * 1000000);
+    });
     this.setState({ quotes: data });
   }
 
-  handleFilteredData = () => {
-    const quotesCopy = [...this.state.quotes];
-    const filteredArray = quotesCopy.filter((quote) => {
-      return quote.character.includes(this.state.searchInput);
-    });
-
-    //ChatGPT code:
-    if (filteredArray.length > 0) {
-      this.setState({ quotes: filteredArray });
-    } else {
-      // If the filtered array is empty, you may want to handle it accordingly
-      // For example, reset the quotes to the original array
-      this.setState({ quotes: quotesCopy });
-    }
-
-    // this.setState({ quotes: filteredArray });
-  };
-
   render() {
+    if (!this.state.quotes) {
+      return <p>Loading ...</p>;
+    }
     console.log(this.state);
+    const filteredArray = this.state.quotes.filter((quote) => {
+      console.log(quote.character, this.state.searchInput);
+      return quote.character
+        .toLowerCase()
+        .includes(this.state.searchInput.toLowerCase());
+    });
+    console.log(filteredArray);
     return (
       <>
         <input
@@ -44,6 +39,9 @@ class App extends Component {
           placeholder="Search your Character"
           onInput={this.onSearchInput}
         ></input>
+        <CharacterContainer
+          quotes={filteredArray.length ? filteredArray : this.state.quotes}
+        />
       </>
     );
   }
