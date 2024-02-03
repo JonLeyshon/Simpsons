@@ -4,11 +4,13 @@ class CharacterContainer extends Component {
   state = {};
   render() {
     // console.log(this.props);
-    return (
-      <>
-        <CharacterItem quotes={this.props.quotes} />;
-      </>
-    );
+    const { quotes, onDeleteItem } = this.props;
+    // console.log(quotes);
+    return quotes.map((item, index) => {
+      return (
+        <CharacterItem {...item} onDeleteItem={onDeleteItem} index={index} />
+      );
+    });
   }
 }
 

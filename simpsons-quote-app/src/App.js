@@ -15,23 +15,31 @@ class App extends Component {
       `https://thesimpsonsquoteapi.glitch.me/quotes?count=100`
     );
     data.forEach((item) => {
-      item.id = Math.round(Math.random() * 1000000);
+      item.id = Math.round(Math.random() * 10000000);
     });
     this.setState({ quotes: data });
   }
+
+  onDeleteItem = (index) => {
+    const quotes = [...this.state.quotes];
+    quotes.splice(index, 1);
+    this.setState(quotes);
+  };
 
   render() {
     if (!this.state.quotes) {
       return <p>Loading ...</p>;
     }
-    console.log(this.state);
+
     const filteredArray = this.state.quotes.filter((quote) => {
-      console.log(quote.character, this.state.searchInput);
+      // console.log(quote.character, this.state.searchInput);
       return quote.character
         .toLowerCase()
         .includes(this.state.searchInput.toLowerCase());
     });
-    console.log(filteredArray);
+
+    // this.setState({ filteredArray: filteredArray });
+
     return (
       <>
         <input
@@ -41,6 +49,7 @@ class App extends Component {
         ></input>
         <CharacterContainer
           quotes={filteredArray.length ? filteredArray : this.state.quotes}
+          onDeleteItem={this.onDeleteItem}
         />
       </>
     );
