@@ -3,6 +3,7 @@ import axios from "axios";
 import UserSearch from "./ components/UserSearch";
 import CharacterContainer from "./ components/CharacterContainer";
 import "./App.css";
+import "bulma/css/bulma.css";
 class App extends Component {
   state = { searchInput: "" };
 
@@ -20,17 +21,18 @@ class App extends Component {
     this.setState({ quotes: data });
   }
 
-  onDeleteItem = (index) => {
+  onDeleteItem = (id) => {
     const quotes = [...this.state.quotes];
+    const index = quotes.findIndex((item) => item.id === id);
     quotes.splice(index, 1);
-    this.setState(quotes);
+    this.setState({ quotes: quotes });
   };
 
   render() {
     if (!this.state.quotes) {
       return <p>Loading ...</p>;
     }
-
+    // console.log(this.state);
     const filteredArray = this.state.quotes.filter((quote) => {
       // console.log(quote.character, this.state.searchInput);
       return quote.character
@@ -38,15 +40,18 @@ class App extends Component {
         .includes(this.state.searchInput.toLowerCase());
     });
 
-    // this.setState({ filteredArray: filteredArray });
-
     return (
       <>
-        <input
-          type="text"
-          placeholder="Search your Character"
-          onInput={this.onSearchInput}
-        ></input>
+        <div className="inputContainer">
+          <h1 className="has-text-centered is-size-1"> Simpsons Quotes</h1>
+          <input
+            type="text"
+            placeholder="Search your Character"
+            className="input is-medium is-warning px-4"
+            onInput={this.onSearchInput}
+          ></input>
+        </div>
+
         <CharacterContainer
           quotes={filteredArray.length ? filteredArray : this.state.quotes}
           onDeleteItem={this.onDeleteItem}
