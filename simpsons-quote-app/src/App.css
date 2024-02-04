@@ -1,3 +1,12 @@
 .character:nth-child(4n) {
   background-color: rgb(191, 191, 187);
 }
+
+.headingContainer {
+  width: 50%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-bottom: 45px;
+}
