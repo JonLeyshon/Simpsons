@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import axios from "axios";
 import UserSearch from "./ components/UserSearch";
 import CharacterContainer from "./ components/CharacterContainer";
-import "./App.css";
 import "bulma/css/bulma.css";
+import "./App.css";
 class App extends Component {
-  state = { searchInput: "", likedTotal: 0 };
+  state = { searchInput: "", likedTotal: 0, listOrder: null };
 
   onSearchInput = (e) => {
     this.setState({ searchInput: e.target.value });
@@ -44,6 +44,12 @@ class App extends Component {
     this.setState({ quotes: quotes, likedTotal: likedTotal });
   };
 
+  // onSortQuotes = () => {
+  //   const quotes = [this.state.quotes];
+  //   const sortedQuotes
+
+  // }
+
   render() {
     if (!this.state.quotes) {
       return <p>Loading ...</p>;
@@ -58,24 +64,22 @@ class App extends Component {
 
     return (
       <>
-        <header className="headingContainer">
-          <h1 className="has-text-centered is-size-1">Simpsons Quotes</h1>
+        <header>
+          <img src="https://ch12-thesimpsons.netlify.app/static/media/simpsons.5ec25fe774cfe1a5641fb30ba7ad1292.svg" />
           <div className="inputContainer">
-            <div className="field is-grouped is-grouped-centered">
-              <div className="control is-expanded">
-                <input
-                  type="text"
-                  placeholder="Search your Character"
-                  className="input is-medium is-warning is-half px-4"
-                  onInput={this.onSearchInput}
-                />
-              </div>
-            </div>
-            <h3 className="has-text-centered">
-              {" "}
-              Amount of quotes Liked: {this.state.likedTotal}
-            </h3>
+            <input
+              type="text"
+              placeholder="Search your Character"
+              className="input is-warning is-medium"
+              onInput={this.onSearchInput}
+            />
+            <select className="select">
+              <option value="Asc">A-Z</option>
+              <option value="Desc">Z-A</option>
+              <option value="Random">Random</option>
+            </select>
           </div>
+          <h3 className=""> Amount of quotes Liked: {this.state.likedTotal}</h3>
         </header>
 
         <CharacterContainer
