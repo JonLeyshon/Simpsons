@@ -3,7 +3,7 @@ import CharacterItem from "./Character";
 class CharacterContainer extends Component {
   state = {};
   render() {
-    console.log(this.props);
+    // console.log(this.props);
     const { quotes, onDeleteItem, onLikedItem, likedTotal } = this.props;
     // console.log(quotes);
     return quotes.map((item) => {
@@ -12,7 +12,6 @@ class CharacterContainer extends Component {
           {...item}
           onDeleteItem={onDeleteItem}
           onLikedItem={onLikedItem}
-          likedTotal={this.props.likedTotal}
         />
       );
     });

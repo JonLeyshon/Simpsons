@@ -5,7 +5,7 @@ import CharacterContainer from "./ components/CharacterContainer";
 import "bulma/css/bulma.css";
 import "./App.css";
 class App extends Component {
-  state = { searchInput: "", likedTotal: 0, listOrder: null };
+  state = { searchInput: "", likedTotal: 0, listOrder: "random" };
 
   onSearchInput = (e) => {
     this.setState({ searchInput: e.target.value });
@@ -31,24 +31,36 @@ class App extends Component {
 
   onLikedItem = (id) => {
     const quotes = [...this.state.quotes];
-    let likedTotal = 0;
-    console.log(likedTotal);
-    console.log(quotes);
     const index = quotes.findIndex((item) => item.id === id);
     quotes[index].liked = !quotes[index].liked;
-    quotes.forEach((item) => {
-      if (item.liked === true) {
-        likedTotal++;
-      }
-    });
-    this.setState({ quotes: quotes, likedTotal: likedTotal });
+    this.setState({ quotes: quotes });
   };
 
-  // onSortQuotes = () => {
-  //   const quotes = [this.state.quotes];
-  //   const sortedQuotes
-
-  // }
+  onSortItemValue = (e) => {
+    // this.setState({ listOrder: e.target.value });
+    const sortingValue = e.target.value;
+    console.log(sortingValue);
+    const quotes = [...this.state.quotes];
+    let sortedQuotes = quotes;
+    if (sortingValue === "random") {
+      return;
+    } else {
+      sortedQuotes = quotes.sort((a, b) => {
+        return a.character.localeCompare(b.character);
+      });
+      if (sortingValue === "Desc") {
+        sortedQuotes.reverse();
+      }
+    }
+    this.setState({ quotes: sortedQuotes });
+    // if (sortingValue === ("Asc" || "Desc")) {
+    //   sortedQuotes = quotes.sort((a, b) => {
+    //     return a.character.localeCompare(b.character);
+    //   });
+    //   console.log(sortedQuotes);
+    // }
+    // this.setState({ quotes: sortedQuotes });
+  };
 
   render() {
     if (!this.state.quotes) {
@@ -62,6 +74,11 @@ class App extends Component {
         .includes(this.state.searchInput.toLowerCase());
     });
 
+    const numberOfLikedQuotes = this.state.quotes.filter(
+      (quote) => quote.liked
+    ).length;
+
+    // console.log(this.state);
     return (
       <>
         <header>
@@ -73,13 +90,15 @@ class App extends Component {
               className="input is-warning is-medium"
               onInput={this.onSearchInput}
             />
-            <select className="select">
+            <select onChange={this.onSortItemValue} className="select">
+              <option value="Random">Random</option>
               <option value="Asc">A-Z</option>
               <option value="Desc">Z-A</option>
-              <option value="Random">Random</option>
             </select>
           </div>
-          <h3 className=""> Amount of quotes Liked: {this.state.likedTotal}</h3>
+          <h3 className="">
+            {`Number of Liked quotes: ${numberOfLikedQuotes}`}
+          </h3>
         </header>
 
         <CharacterContainer
