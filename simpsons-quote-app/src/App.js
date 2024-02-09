@@ -61,7 +61,7 @@ class App extends Component {
     const sortingValue = e.target.value;
     const quotes = [...this.state.quotes];
     let sortedQuotes = [...quotes];
-    if (sortingValue === "random") {
+    if (sortingValue === "Random") {
       sortedQuotes = quotes.sort(() => Math.random() - 0.5);
     } else {
       sortedQuotes = quotes.sort((a, b) => {
