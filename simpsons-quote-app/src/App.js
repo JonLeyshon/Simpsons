@@ -12,14 +12,22 @@ class App extends Component {
   schema = { name: Joi.string().min(2).max(20) };
 
   onSearchInput = async (e) => {
-    this.setState({ searchInput: e.target.value });
+    let searchInput = { ...this.state.searchInput };
+    searchInput = e.target.value;
+
+    this.setState({ searchInput });
 
     const _joiInstance = Joi.object(this.schema);
 
     try {
-      await _joiInstance.validateAsync({ name: this.state.searchInput });
+      await _joiInstance.validateAsync({ name: searchInput });
+      this.setState({ errors: null });
     } catch (e) {
-      console.log(e);
+      const errorsMod = {};
+      e.details.forEach((error) => {
+        errorsMod[error.context.key] = error.message;
+      });
+      this.setState({ errors: errorsMod });
     }
   };
 
@@ -51,7 +59,6 @@ class App extends Component {
   onSortItemValue = (e) => {
     // this.setState({ listOrder: e.target.value });
     const sortingValue = e.target.value;
-    // console.log(sortingValue);
     const quotes = [...this.state.quotes];
     let sortedQuotes = [...quotes];
     if (sortingValue === "random") {
@@ -64,7 +71,6 @@ class App extends Component {
         sortedQuotes.reverse();
       }
     }
-    console.log(sortedQuotes);
     this.setState({ quotes: sortedQuotes });
   };
 
@@ -73,9 +79,7 @@ class App extends Component {
     if (!this.state.quotes) {
       return <p>Loading ...</p>;
     }
-    // console.log(this.state);
     const filteredArray = this.state.quotes.filter((quote) => {
-      // console.log(quote.character, this.state.searchInput);
       return quote.character
         .toLowerCase()
         .includes(this.state.searchInput.toLowerCase());
@@ -85,7 +89,6 @@ class App extends Component {
       (quote) => quote.liked
     ).length;
 
-    // console.log(this.state);
     return (
       <>
         <header className="is-flex is-centered">
@@ -99,6 +102,7 @@ class App extends Component {
               className="input is-warning is-medium"
               onInput={this.onSearchInput}
             />
+            <p> {this.state.errors && this.state.errors.name} </p>
             <select onChange={this.onSortItemValue} className="select">
               <option value="Random">Random</option>
               <option value="Asc">A-Z</option>
