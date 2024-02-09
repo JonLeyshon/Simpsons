@@ -1,12 +1,32 @@
 .character:nth-child(4n) {
-  background-color: rgb(191, 191, 187);
+  background-color: deepskyblue;
 }
 
-.headingContainer {
-  width: 50%;
+header > img {
+  width: 450px;
   margin: auto;
+}
+
+header {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-bottom: 45px;
+  align-items: center;
+  background-color: deepskyblue;
+  padding: 50px;
+}
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  margin: 10px;
+}
+
+input.is-warning {
+  width: 50vw;
+  font-size: 1.25rem;
+  padding: 20px;
+  margin-bottom: 10px;
 }

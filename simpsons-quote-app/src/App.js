@@ -2,13 +2,33 @@ import React, { Component } from "react";
 import axios from "axios";
 import UserSearch from "./ components/UserSearch";
 import CharacterContainer from "./ components/CharacterContainer";
-import "./App.css";
 import "bulma/css/bulma.css";
-class App extends Component {
-  state = { searchInput: "", likedTotal: 0 };
+import "./App.css";
+import Joi from "joi";
 
-  onSearchInput = (e) => {
-    this.setState({ searchInput: e.target.value });
+class App extends Component {
+  state = { searchInput: "", likedTotal: 0, listOrder: "random" };
+
+  schema = { name: Joi.string().min(2).max(20) };
+
+  onSearchInput = async (e) => {
+    let searchInput = { ...this.state.searchInput };
+    searchInput = e.target.value;
+
+    this.setState({ searchInput });
+
+    const _joiInstance = Joi.object(this.schema);
+
+    try {
+      await _joiInstance.validateAsync({ name: searchInput });
+      this.setState({ errors: null });
+    } catch (e) {
+      const errorsMod = {};
+      e.details.forEach((error) => {
+        errorsMod[error.context.key] = error.message;
+      });
+      this.setState({ errors: errorsMod });
+    }
   };
 
   async componentDidMount() {
@@ -31,51 +51,67 @@ class App extends Component {
 
   onLikedItem = (id) => {
     const quotes = [...this.state.quotes];
-    let likedTotal = 0;
-    console.log(likedTotal);
-    console.log(quotes);
     const index = quotes.findIndex((item) => item.id === id);
     quotes[index].liked = !quotes[index].liked;
-    quotes.forEach((item) => {
-      if (item.liked === true) {
-        likedTotal++;
+    this.setState({ quotes: quotes });
+  };
+
+  onSortItemValue = (e) => {
+    // this.setState({ listOrder: e.target.value });
+    const sortingValue = e.target.value;
+    const quotes = [...this.state.quotes];
+    let sortedQuotes = [...quotes];
+    if (sortingValue === "random") {
+      sortedQuotes = quotes.sort(() => Math.random() - 0.5);
+    } else {
+      sortedQuotes = quotes.sort((a, b) => {
+        return a.character.localeCompare(b.character);
+      });
+      if (sortingValue === "Desc") {
+        sortedQuotes.reverse();
       }
-    });
-    this.setState({ quotes: quotes, likedTotal: likedTotal });
+    }
+    this.setState({ quotes: sortedQuotes });
   };
 
   render() {
+    console.log(this.state);
     if (!this.state.quotes) {
       return <p>Loading ...</p>;
     }
-    // console.log(this.state);
     const filteredArray = this.state.quotes.filter((quote) => {
-      // console.log(quote.character, this.state.searchInput);
       return quote.character
         .toLowerCase()
         .includes(this.state.searchInput.toLowerCase());
     });
 
+    const numberOfLikedQuotes = this.state.quotes.filter(
+      (quote) => quote.liked
+    ).length;
+
     return (
       <>
-        <header className="headingContainer">
-          <h1 className="has-text-centered is-size-1">Simpsons Quotes</h1>
+        <header className="is-flex is-centered">
+          <img src="https://ch12-thesimpsons.netlify.app/static/media/simpsons.5ec25fe774cfe1a5641fb30ba7ad1292.svg" />
           <div className="inputContainer">
-            <div className="field is-grouped is-grouped-centered">
-              <div className="control is-expanded">
-                <input
-                  type="text"
-                  placeholder="Search your Character"
-                  className="input is-medium is-warning is-half px-4"
-                  onInput={this.onSearchInput}
-                />
-              </div>
-            </div>
-            <h3 className="has-text-centered">
-              {" "}
-              Amount of quotes Liked: {this.state.likedTotal}
-            </h3>
+            <input
+              type="text"
+              placeholder="Search your Character"
+              id="name"
+              name="name"
+              className="input is-warning is-medium"
+              onInput={this.onSearchInput}
+            />
+            <p> {this.state.errors && this.state.errors.name} </p>
+            <select onChange={this.onSortItemValue} className="select">
+              <option value="Random">Random</option>
+              <option value="Asc">A-Z</option>
+              <option value="Desc">Z-A</option>
+            </select>
           </div>
+          <h3 className="">
+            {`Number of Liked quotes: ${numberOfLikedQuotes}`}
+          </h3>
         </header>
 
         <CharacterContainer
