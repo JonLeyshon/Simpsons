@@ -4,11 +4,23 @@ import UserSearch from "./ components/UserSearch";
 import CharacterContainer from "./ components/CharacterContainer";
 import "bulma/css/bulma.css";
 import "./App.css";
+import Joi from "joi";
+
 class App extends Component {
   state = { searchInput: "", likedTotal: 0, listOrder: "random" };
 
-  onSearchInput = (e) => {
+  schema = { name: Joi.string().min(2).max(20) };
+
+  onSearchInput = async (e) => {
     this.setState({ searchInput: e.target.value });
+
+    const _joiInstance = Joi.object(this.schema);
+
+    try {
+      await _joiInstance.validateAsync({ name: this.state.searchInput });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   async componentDidMount() {
@@ -39,11 +51,11 @@ class App extends Component {
   onSortItemValue = (e) => {
     // this.setState({ listOrder: e.target.value });
     const sortingValue = e.target.value;
-    console.log(sortingValue);
+    // console.log(sortingValue);
     const quotes = [...this.state.quotes];
-    let sortedQuotes = quotes;
+    let sortedQuotes = [...quotes];
     if (sortingValue === "random") {
-      return;
+      sortedQuotes = quotes.sort(() => Math.random() - 0.5);
     } else {
       sortedQuotes = quotes.sort((a, b) => {
         return a.character.localeCompare(b.character);
@@ -52,17 +64,12 @@ class App extends Component {
         sortedQuotes.reverse();
       }
     }
+    console.log(sortedQuotes);
     this.setState({ quotes: sortedQuotes });
-    // if (sortingValue === ("Asc" || "Desc")) {
-    //   sortedQuotes = quotes.sort((a, b) => {
-    //     return a.character.localeCompare(b.character);
-    //   });
-    //   console.log(sortedQuotes);
-    // }
-    // this.setState({ quotes: sortedQuotes });
   };
 
   render() {
+    console.log(this.state);
     if (!this.state.quotes) {
       return <p>Loading ...</p>;
     }
@@ -81,12 +88,14 @@ class App extends Component {
     // console.log(this.state);
     return (
       <>
-        <header>
+        <header className="is-flex is-centered">
           <img src="https://ch12-thesimpsons.netlify.app/static/media/simpsons.5ec25fe774cfe1a5641fb30ba7ad1292.svg" />
           <div className="inputContainer">
             <input
               type="text"
               placeholder="Search your Character"
+              id="name"
+              name="name"
               className="input is-warning is-medium"
               onInput={this.onSearchInput}
             />
