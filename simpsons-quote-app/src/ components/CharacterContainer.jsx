@@ -1,21 +1,22 @@
-import React, { Component } from "react";
+import React from "react";
 import CharacterItem from "./Character";
-class CharacterContainer extends Component {
-  state = {};
-  render() {
-    // console.log(this.props);
-    const { quotes, onDeleteItem, onLikedItem, likedTotal } = this.props;
-    // console.log(quotes);
+
+const CharacterContainer = (props) => {
+  const { quotes } = props;
+  console.log(quotes);
+  if (!quotes) {
+    return <> Loading....</>;
+  } else {
     return quotes.map((item) => {
       return (
         <CharacterItem
           {...item}
-          onDeleteItem={onDeleteItem}
-          onLikedItem={onLikedItem}
+          //   onDeleteItem={onDeleteItem}
+          //   onLikedItem={onLikedItem}
         />
       );
     });
   }
-}
+};
 
 export default CharacterContainer;
