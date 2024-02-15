@@ -1,22 +1,18 @@
-import React from "react";
-import CharacterItem from "./Character";
+import React, { useState } from "react";
+import Character from "./Character";
 
 const CharacterContainer = (props) => {
-  const { quotes } = props;
-  console.log(quotes);
-  if (!quotes) {
-    return <> Loading....</>;
-  } else {
-    return quotes.map((item) => {
-      return (
-        <CharacterItem
-          {...item}
-          //   onDeleteItem={onDeleteItem}
-          //   onLikedItem={onLikedItem}
-        />
-      );
-    });
-  }
+  const { quotes, onDeleteItem, onLikedItem, likedTotal } = props;
+  console.log(props);
+  return quotes.map((item) => {
+    return (
+      <Character
+        {...item}
+        onDeleteItem={onDeleteItem}
+        onLikedItem={onLikedItem}
+      />
+    );
+  });
 };
 
 export default CharacterContainer;
