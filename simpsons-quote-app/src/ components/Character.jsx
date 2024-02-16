@@ -12,7 +12,6 @@ const Character = (props) => {
     onLikedItem,
   } = props;
 
-  console.log(character);
   return (
     <>
       <div key={id} className="character is-align-items-center  columns ">

@@ -3,7 +3,7 @@ import Character from "./Character";
 
 const CharacterContainer = (props) => {
   const { quotes, onDeleteItem, onLikedItem, likedTotal } = props;
-  console.log(props);
+  // console.log(props);
   return quotes.map((item) => {
     return (
       <Character
